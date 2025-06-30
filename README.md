@@ -2,6 +2,7 @@
 # 1D-PIE — One Dimensional Planetary Interior Evolution
 
 [![License](https://img.shields.io/github/license/schmidtjm/1D-PIE)](./LICENSE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15778374.svg)](https://doi.org/10.5281/zenodo.15778374)
 
 1D-PIE is a 1D interior evolution code (@Julia M. Schmidt) that calculates the thermal evolution of terrestrial planets up to Earth masses M_E=3.0. It encompasses a stagnant lid and mobile lid tectonic regime and includes crust and lithosphere evolution, local mineral/melt partition coefficient calculations, and first-order outgassing of H2O. The 1D model is based on the conservation of energy and runs the evolution of the planets forward in time with assigned starting conditions such as radii, initial temperature conditions, and heat source and volatile abundances.
 

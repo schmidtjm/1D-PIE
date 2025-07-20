@@ -891,6 +891,7 @@ class interior_evolution:
                     self.Rcr[i] = self.Rp-self.Dcr[i] 
 
                 elif self.eclogite =='yes': # crust delamination through eclogite dripping: eclogite formation conditions set maximim crust thickness
+                    self.Dcr[i] = min(self.Dcr[i],self.Dl[i]-self.Dl_cr)  # additional crustal delamination
                     Dcr_old = self.Dcr[i]
                     if (Dcr_old == 0):
                         Dcr_old = 1.0

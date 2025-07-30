@@ -1,10 +1,3 @@
-"""
-This code is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license." --> alles in Readme?
-
-@author: Julia M. Schmidt
-@date: 16.08.2023, last updated: 26.05.2025
-"""
-
 #################################################################
 import numpy as np
 from scipy.optimize import fsolve, fixed_point, brentq, root
@@ -240,8 +233,9 @@ class interior_evolution:
             else:
                 Tbmean = self.Tb[i]
                 Pbmean = Pb
-
-            # Viscosities   
+                
+                
+             # Viscosities    
             if (Pc<25e+9): #Pa
                 self.etam[i] = suppf.calculate_viscosity(self, self.Tm[i], Pm) #changed location back because Pc would not influence all Tm
             else:
@@ -259,6 +253,7 @@ class interior_evolution:
             else:
                 self.etab[i] = suppf.calculate_viscosity_CMB(self, Tbmean, Pbmean)
 
+                  
             dTc = max(self.Tc[i]-self.Tb[i],1)
             self.Ra[i] = self.rhom*self.g*self.alpha*(self.Tm[i]-self.Tl[i]+dTc)*(self.Rp-self.Rc-self.Dl[i-1])**3.0/(kappa*self.etam[i]) # Morschhauser et al. 2011 Eq.6
             self.delta_s[i] = (self.Rp-self.Rc- self.Dl[i-1])*(self.Racrit/self.Ra[i])**self.beta           # Thickness of the upper TBL 

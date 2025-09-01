@@ -3,14 +3,8 @@ import numpy as np
 
 #####################################################
 """
-This code is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license." --> alles in Readme?
-
-@author: Julia M. Schmidt
-@date: 16.08.2023, last updated: 12.11.2024
-
 Input values generated from 1D Interior Structure Code (@Lena Noack) after magma ocean (100% solidified mantle)
 Inputs for 1D interior evolution code (@Julia Schmidt & Lena Noack), solar system rocky bodies and varying Earth-masses
-
 """
 
 #####################################################
@@ -27,7 +21,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
         Ts:  surface temperature (K)      
         Tm0: initial mantle temperature (K)
         Tc0: initial core temperature (K) 
-        V:   Activation volume in the upper mantle (m^3/mol)
         etaref: reference viscosity (Pa*s)
         cc:     Core heat capacity (J/(kg K))    
         cm:     Mantle heat capacity (J/(kg K)) 
@@ -66,8 +59,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 440.0       
             self.Tm0  = 1650.        
             self.Tc0  = 1900. 
-            self.V = 5e-6             # Activation volume in upper mantle (m^3/mol) (Karato & Wu for dry rheologies)
-            self.etaref = 1e21 #1e19
             self.cc = 750.0           # Core heat capacity (J/(kg K))    # Breuer et al 2007: 750.0; Hauck et al 2004: 465 .0
             self.cm = 1297.0          # Mantle heat capacity (J/(kg K))  # Breuer et al 2007: 1297.0; Hauck et al 2004: 1212.0
             self.ccr = 1000.0         # Crust heat capacity (J/(kg K))
@@ -101,9 +92,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.rho_H2O = 1000.0
             self.Ts   = 730.0       
             self.Tm0  = 1700      
-            self.Tc0  = 4200.
-            self.V = 5e-6             # Activation volume in upper mantle (m^3/mol) (Karato & Wu for dry rheologies)
-            self.etaref = 1e20         
+            self.Tc0  = 4200.      
             self.cc = 850.0           # Core heat capacity (J/(kg K))    #O'Rourke & Korenaga 2015: 850.0
             self.cm = 1200.0          # Mantle heat capacity (J/(kg K))  #O'Rourke & Korenaga 2015: 1200.0 
             self.ccr = 1000.0         # Crust heat capacity (J/(kg K))
@@ -139,8 +128,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700          
             self.Tc0  = 4000.
-            self.V = 5e-6             # Activation volume in upper mantle (m^3/mol) (Karato & Wu for dry rheologies)
-            self.etaref = 1e20 #1e20
             self.cc = 800.0           # Core heat capacity (J/(kg K))  Stamenkovi´c & Breuer 2012  # O'Rourke & Korenaga 2015: 850.0
             self.cm = 1250.0          # Mantle heat capacity (J/(kg K))Stamenkovi´c & Breuer 2012   #O'Rourke & Korenaga 2015: 1200.0 
             self.ccr = 1000.0         # Crust heat capacity (J/(kg K))
@@ -175,8 +162,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 270.0       
             self.Tm0  = 1550.           
             self.Tc0  = 1998. 
-            self.V = 5e-6             # Activation volume in upper mantle (m^3/mol) (Karato & Wu for dry rheologies)
-            self.etaref = 1e19        # Laneuville, Taylor, Wieczorek 2018
+          #  self.etaref = 1e19        # Laneuville, Taylor, Wieczorek 2018
             self.cc = 850.0           # Core heat capacity (J/(kg K))    # Laneuville, Taylor, Wieczorek 2018
             self.cm = 1000.0          # Mantle heat capacity (J/(kg K))  # Laneuville, Taylor, Wieczorek 2018
             self.ccr = 1000.0         # Crust heat capacity (J/(kg K))
@@ -213,8 +199,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 220.0       
             self.Tm0  = 1750            
             self.Tc0  = 2160.  
-            self.V = 5e-6 
-            self.etaref = 1e19 
             self.cc = 840.0           # Core heat capacity (J/(kg K)) Morschhauser 2011
             self.cm = 1142.0          # Mantle heat capacity (J/(kg K))  
             self.ccr = 1000.0         # Crust heat capacity (J/(kg K))
@@ -252,9 +236,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.rho_H2O = 1000.0
             self.Ts   = 288.0       
             self.Tm0  =  1600.0       # assumed 
-            self.Tc0  = 2636. 
-            self.V = 5e-6          
-            self.etaref = 1e20
+            self.Tc0  = 2636.          
             self.cc = 1008.0          
             self.cm = 1191.0         
             self.ccr = 1000.0     
@@ -290,9 +272,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.rho_H2O = 1000.0
             self.Ts   = 288.0       
             self.Tm0  = 1600.            
-            self.Tc0  = 3245.0
-            self.V = 5e-6             
-            self.etaref = 1e20
+            self.Tc0  = 3245.0            
             self.cc = 1082.432857          
             self.cm = 1205.617274      
             self.ccr = 1000.0        
@@ -326,9 +306,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.rho_H2O = 1000.0
             self.Ts   = 288.0       
             self.Tm0  = 1600.            
-            self.Tc0  = 3729.4
-            self.V = 5e-6            
-            self.etaref = 1e20
+            self.Tc0  = 3729.4           
             self.cc = 1129.729    
             self.cm =1207.351
             self.ccr = 1000.0        
@@ -362,9 +340,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.rho_H2O = 1000.0
             self.Ts   = 288.0       
             self.Tm0  = 1600.            
-            self.Tc0  = 4103.45
-            self.V = 5e-6           
-            self.etaref = 1e20
+            self.Tc0  = 4103.45          
             self.cc =  1151.62         
             self.cm = 1212.05       
             self.ccr = 1000.0        
@@ -398,9 +374,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.rho_H2O = 1000.0
             self.Ts   = 288.0       
             self.Tm0  = 1650.0 
-            self.Tc0  = 4310.0
-            self.V = 5e-6            
-            self.etaref = 1e20
+            self.Tc0  = 4310.0            
             self.cc =  1135.41      
             self.cm = 1213.87        
             self.ccr = 1000.0     
@@ -435,9 +409,7 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.rho_H2O = 1000.0
             self.Ts   = 288.0       
             self.Tm0  = 1650.            
-            self.Tc0  = 4356.35
-            self.V = 5e-6            
-            self.etaref = 1e20
+            self.Tc0  = 4356.35            
             self.cc =  1090.07      
             self.cm = 1216.0       
             self.ccr = 1000.0       
@@ -473,8 +445,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1650.          
             self.Tc0  = 4464.28
-            self.V = 5e-6           
-            self.etaref = 1e20
             self.cc =  1066.26    
             self.cm = 1217.27      
             self.ccr = 1000.0        
@@ -510,8 +480,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1650.            
             self.Tc0  = 4631.7
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1058.4     
             self.cm = 1216.0      
             self.ccr = 1000.0         
@@ -547,8 +515,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1650.      
             self.Tc0  = 4825.54
-            self.V = 5e-6          
-            self.etaref = 1e20
             self.cc =  1056.2       
             self.cm = 1210.7      
             self.ccr = 1000.0        
@@ -584,8 +550,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.            
             self.Tc0  = 5020.19
-            self.V =   5e-6            
-            self.etaref = 1e20
             self.cc =  1055.93  
             self.cm = 1213.84         
             self.ccr = 1000.0         
@@ -621,8 +585,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.        
             self.Tc0  = 5211.7
-            self.V =   5e-6           
-            self.etaref = 1e20
             self.cc =  1056.05        
             self.cm = 1213.15         
             self.ccr = 1000.0        
@@ -658,8 +620,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.            
             self.Tc0  = 5399.70
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1056.29      
             self.cm = 1212.56       
             self.ccr = 1000.0     
@@ -695,8 +655,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.       
             self.Tc0  = 5491.34
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1056.38       
             self.cm = 1212.00        
             self.ccr = 1000.0        
@@ -732,8 +690,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.          
             self.Tc0  = 5583.56
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1056.46          
             self.cm = 1212.19       
             self.ccr = 1000.0        
@@ -769,8 +725,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.            
             self.Tc0  = 5764.63
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1056.72      
             self.cm = 1215.065        
             self.ccr = 1000.0        
@@ -806,8 +760,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.            
             self.Tc0  = 5938.71
-            self.V = 5e-6           
-            self.etaref = 1e20
             self.cc =  1056.54         
             self.cm = 1214.10        
             self.ccr = 1000.0      
@@ -843,8 +795,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.0            
             self.Tc0  = 6110.08
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1056.33       
             self.cm = 1216.0        
             self.ccr = 1000.0      
@@ -879,8 +829,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.0        
             self.Tc0  = 5934.05
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1050.81     
             self.cm = 1216.08       
             self.ccr = 1000.0       
@@ -916,8 +864,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.0            
             self.Tc0  = 6362.23
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1061.165     
             self.cm = 1215.389      
             self.ccr = 1000.0 
@@ -952,8 +898,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1700.0    
             self.Tc0  = 6578.2
-            self.V = 5e-6           
-            self.etaref = 1e20
             self.cc =  1060.226 
             self.cm = 1215.926       
             self.ccr = 1000.0         
@@ -989,8 +933,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  =1750.0      
             self.Tc0  = 6733.53
-            self.V =  5e-6          
-            self.etaref = 1e20
             self.cc =  1059.454    
             self.cm = 1215.298     
             self.ccr = 1000.0    
@@ -1026,8 +968,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0            
             self.Tc0  = 6887.12 
-            self.V =  5e-6            
-            self.etaref = 1e20
             self.cc =  1058.604    
             self.cm = 1215.798      
             self.ccr = 1000.0       
@@ -1063,8 +1003,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0            
             self.Tc0  = 7037.085
-            self.V = 2.5e-6 
-            self.etaref = 1e20
             self.cc =  1057.65      
             self.cm = 1215.191     
             self.ccr = 1000.0        
@@ -1099,8 +1037,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0         
             self.Tc0  = 7184.66
-            self.V =  5e-6         
-            self.etaref = 1e20
             self.cc =  1056.642   
             self.cm = 1214.610    
             self.ccr = 1000.0        
@@ -1135,8 +1071,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0            
             self.Tc0  = 7328.69
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1057.65     
             self.cm = 1215.191     
             self.ccr = 1000.0       
@@ -1171,8 +1105,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0            
             self.Tc0  = 7472.6 
-            self.V =  5e-6             
-            self.etaref = 1e20
             self.cc =  1054.667     
             self.cm = 1219.024       
             self.ccr = 1000.0       
@@ -1208,8 +1140,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0            
             self.Tc0  = 7613.56
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1053.481   
             self.cm = 1218.546   
             self.ccr = 1000.0        
@@ -1244,8 +1174,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0           
             self.Tc0  = 7752.63 
-            self.V =  5e-6              
-            self.etaref = 1e20
             self.cc =  1052.258      
             self.cm = 1218.092        
             self.ccr = 1000.0         
@@ -1281,8 +1209,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0            
             self.Tc0  = 7889.802
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1050.986       
             self.cm = 1217.666    
             self.ccr = 1000.0         
@@ -1317,8 +1243,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1750.0    
             self.Tc0  = 8026.00
-            self.V =  5e-6            
-            self.etaref = 1e20
             self.cc =  1049.717    
             self.cm = 1218.649       
             self.ccr = 1000.0        
@@ -1354,8 +1278,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800          
             self.Tc0  = 8159.92
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1048.42     
             self.cm = 1218.23      
             self.ccr = 1000.0        
@@ -1390,8 +1312,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0          
             self.Tc0  = 8292.23
-            self.V =  5e-6             
-            self.etaref = 1e20
             self.cc =  1047.089 
             self.cm = 1217.816        
             self.ccr = 1000.0         
@@ -1427,8 +1347,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0             
             self.Tc0  =  8423.081
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1045.76    
             self.cm = 1217.43     
             self.ccr = 1000.0        
@@ -1463,8 +1381,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0            
             self.Tc0  = 8552.52
-            self.V =  5e-6             
-            self.etaref = 1e20
             self.cc =  1044.390   
             self.cm =  1217.036      
             self.ccr = 1000.0       
@@ -1500,8 +1416,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0            
             self.Tc0  = 8680.98
-            self.V = 5e-6 
-            self.etaref = 1e20
             self.cc =  1043.02        
             self.cm = 1218.26   
             self.ccr = 1000.0        
@@ -1536,8 +1450,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0        
             self.Tc0  = 8807.66
-            self.V =  5e-6              
-            self.etaref = 1e20
             self.cc =  1041.671       
             self.cm = 1217.890        
             self.ccr = 1000.0         
@@ -1573,8 +1485,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0            
             self.Tc0  = 8933.34
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1040.26          
             self.cm = 1217.52          
             self.ccr = 1000.0         
@@ -1609,8 +1519,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0         
             self.Tc0  = 9057.76
-            self.V =  5e-6            
-            self.etaref = 1e20
             self.cc =  1038.855     
             self.cm = 1217.175       
             self.ccr = 1000.0         
@@ -1646,8 +1554,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0            
             self.Tc0  = 9181.06
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1037.44         
             self.cm = 1216.87         
             self.ccr = 1000.0          
@@ -1683,8 +1589,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0    
             self.Tc0  = 9300.94
-            self.V =  5e-6            
-            self.etaref = 1e20
             self.cc =  1036.194       
             self.cm = 1218.532       
             self.ccr = 1000.0         
@@ -1720,8 +1624,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0            
             self.Tc0  = 9421.95
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1034.78  
             self.cm = 1218.24  
             self.ccr = 1000.0        
@@ -1757,8 +1659,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0            
             self.Tc0  = 9660.67
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1031.97  
             self.cm = 1219.52         
             self.ccr = 1000.0        
@@ -1794,8 +1694,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1800.0            
             self.Tc0  = 9895.76
-            self.V = 5e-6           
-            self.etaref = 1e20
             self.cc =  1029.15        
             self.cm = 1218.96      
             self.ccr = 1000.0       
@@ -1831,8 +1729,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1850.0           
             self.Tc0  = 10011.89
-            self.V = 5e-6            
-            self.etaref = 1e20
             self.cc =  1027.73      
             self.cm = 1218.69        
             self.ccr = 1000.0          
@@ -1868,8 +1764,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1850.0            
             self.Tc0  = 10127.18
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1026.33       
             self.cm = 1218.43         
             self.ccr = 1000.0          
@@ -1904,8 +1798,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1850.0            
             self.Tc0  = 10241.58
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1024.91     
             self.cm = 1218.18       
             self.ccr = 1000.0       
@@ -1941,8 +1833,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1850.0            
             self.Tc0  = 10355.15
-            self.V = 5e-6           
-            self.etaref = 1e20
             self.cc =  1023.51  
             self.cm = 1217.92      
             self.ccr = 1000.0        
@@ -1978,8 +1868,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1850.0            
             self.Tc0  = 10467.87
-            self.V = 5e-6           
-            self.etaref = 1e20
             self.cc = 1022.11          
             self.cm = 1217.69          
             self.ccr = 1000.0        
@@ -2014,8 +1902,6 @@ def get_input(self, body='Mars', inpfile='input.json'):
             self.Ts   = 288.0       
             self.Tm0  = 1850.          
             self.Tc0  = 10579.71
-            self.V = 5e-6             
-            self.etaref = 1e20
             self.cc =  1020.70     
             self.cm = 1217.46      
             self.ccr = 1000.0          

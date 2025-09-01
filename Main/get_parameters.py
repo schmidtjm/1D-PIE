@@ -45,6 +45,7 @@ def get_parameters(self):
     if self.eclogite =='yes' and self.crust_delamination == 'yes':
         print('WARNING: Eclogite dripping and crust delamination both activated!!!')
     self.hydrous_melting = 'yes'   # yes: takes for T_sol calculations H2O dependent melting into account
+    #self.rheology = 'karato_dry'  # karato_dry:dry rheology  Karato & Wu (1993), karato_wet:  Karato & Wu (1993), else: Stamenkovic 2012
     self.Tcr_cut = 'no'          # yes: does not allow Tcr to become larger than solidus T, 'no': Tcr <= Tl
     self.meltcomp = 'Earth'         # Earth, Mercury, or Mars
     self.mineralogy = 'Earth'       # Earth, Mercury, or Mars
@@ -59,7 +60,9 @@ def get_parameters(self):
     self.delta_c0 = 10e3          # Initial thickness of bottom boundary layer        
     self.Tref     = 1600.0        # Reference temperature (K)
     self.Pref     = 3e9           # Reference pressure (Pa)
-    self.E        = 3e5           # Activation energy (J/mol), 3e5 for olivine (dry rheology), 2.4e5 for wet rheology
+    self.E        = 3e5 #2.4e5 #3e5 #    # Activation energy (J/mol), 3e5 for olivine (dry rheology), 2.4e5 for wet rheology
+    self.V        = 6e-6 #5e-6 # 6e-6 #          # Activation volume in the upper mantle (m^3/mol), 6e-6:Karato & Wu for dry rheologies, 5e-6 wet rheologies
+    self.etaref   = 1e21          # reference viscosity (Pa*s)
     self.Rg       = 8.3144        # Gas constant (J/(mol K))
     self.u0       = 2e-12         # Convection speed scale (m/s) (Morschhauser 2011)
     self.Dcr0     =  30000        # initial crust thickness (m); if set too small, the surface heat flux qs is initially too high

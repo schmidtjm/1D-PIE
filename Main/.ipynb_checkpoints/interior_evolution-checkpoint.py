@@ -515,11 +515,6 @@ class interior_evolution:
                         self.D_K_Cpx_min[i] = self.D_K_Cpx[i]
                         if (self.D_K_Cpx[i]<self.D_K_Cpx_min[i]):
                             self.D_Th_Cpx_min[i] = self.D_K_Cpx[i]
-
-                        self.D_K_Cpx_mean[i] = self.D_K_Cpx_mean[i] + self.D_K_Cpx[i]*F*V
-                        
-                        if (self.D_K_Cpx[i]>self.D_K_Cpx_max[i]):
-                            self.D_K_Cpx_max[i] = self.D_K_Cpx[i]
                     
                          # min/max for D_bulk
                         self.D_K_min[i] = self.D_K[i]

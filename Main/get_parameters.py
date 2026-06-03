@@ -9,7 +9,7 @@ def get_parameters(self):
     # Time/space discretization 
     #################################
     self.yrs = 365.0*24.0*60.0*60.0   # 1 year in seconds
-    self.maxtime =  4.55e9*self.yrs  # Simulation time
+    self.maxtime =  4.55e9*self.yrs #4.55e9*self.yrs  # Simulation time
     self.dt = 1e6*self.yrs            # Time stepping
     self.n_steps = int(self.maxtime/self.dt)   # Number of time steps
     self.n_layers = 100               # Number of mantle layers
@@ -48,7 +48,7 @@ def get_parameters(self):
     #self.rheology = 'karato_dry'  # karato_dry:dry rheology  Karato & Wu (1993), karato_wet:  Karato & Wu (1993), else: Stamenkovic 2012
     self.Tcr_cut = 'no'          # yes: does not allow Tcr to become larger than solidus T, 'no': Tcr <= Tl
     self.meltcomp = 'Earth'         # Earth, Mercury, or Mars
-    self.mineralogy = 'Earth'       # Earth, Mercury, or Mars
+    self.mineralogy = 'Earth' # Earth, Mercury, or Mars
     
     #################################
     # Various constants
@@ -60,13 +60,13 @@ def get_parameters(self):
     self.delta_c0 = 10e3          # Initial thickness of bottom boundary layer        
     self.Tref     = 1600.0        # Reference temperature (K)
     self.Pref     = 3e9           # Reference pressure (Pa)
-    self.E        = 3e5 #2.4e5 #3e5 #    # Activation energy (J/mol), 3e5 for olivine (dry rheology), 2.4e5 for wet rheology
-    self.V        = 6e-6 #5e-6 # 6e-6 #          # Activation volume in the upper mantle (m^3/mol), 6e-6:Karato & Wu for dry rheologies, 5e-6 wet rheologies
-    self.etaref   = 1e21          # reference viscosity (Pa*s)
+    self.E        = 2.4e5 #3e5 #  # Activation energy (J/mol), 3e5 for olivine (dry rheology), 2.4e5 for wet rheology
+    self.V        = 5e-6 #6e-6 #5e-6 #    # Activation volume in the upper mantle (m^3/mol), 6e-6:Karato & Wu for dry rheologies, 5e-6 wet rheologies
+    self.etaref   = 1e19 #1e21          # reference viscosity (Pa*s)
     self.Rg       = 8.3144        # Gas constant (J/(mol K))
     self.u0       = 2e-12         # Convection speed scale (m/s) (Morschhauser 2011)
-    self.Dcr0     =  30000        # initial crust thickness (m); if set too small, the surface heat flux qs is initially too high
-    self.Dl0      = 50000         # initial lithosphere thickness (m)
+    self.Dcr0     = 30000        # initial crust thickness (m); if set too small, the surface heat flux qs is initially too high
+    self.Dl0      = 100000         # initial lithosphere thickness (m)
     self.Dl_min   = 1000          # minimum lithosphere thickness (m) must be >= self.Dl_cr
     self.Dl_cr    = 1000          # differenz zwischen lithosphäre und Kruste
     self.Mscr0    = 0             # initial mass of secondary crust [kg]
@@ -232,7 +232,7 @@ def get_parameters(self):
     self.R_Na = 1.18e-10
     self.R_K  = 1.51e-10
     self.R_Th = 1.041e-10  # Thorium 4+ VIII
-    self.R_U  = 0.983e-10   # Uranium 5+(VII) Wood 1999
+    self.R_U  = 0.983e-10   # Uranium 4(VIII) ood 1999
     self.R_Ce = 1.143e-10  # Cerium 3+ (VIII)
     self.R_La = 1.16e-10   # Lanthanium 3+ (VIII)
     self.R_Sm = 1.079e-10  # Samarium 3+ (VIII)

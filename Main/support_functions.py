@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from get_parameters import *
 
 #####################################################
 
@@ -324,7 +325,7 @@ def set_initial_conditions(self):
     self.Dm[0] = D-self.Dl[0]
     if self.core_cooling =='yes':
         self.delta_c[0] = self.delta_c0   # Initial thickness of the bottom TBL
-        self.qc[0]      = self.km*(self.Tc[0] - self.Tb[0])/self.delta_c[0]
+        self.qc[0]      = self.km_b*(self.Tc[0] - self.Tb[0])/self.delta_c[0]
     else:
         self.delta_c[0] = 0.0
         self.qc[0]      = 0.0
@@ -336,26 +337,46 @@ def set_initial_conditions(self):
     else:
         self.qs[0]      = self.kcr*((self.Tl[0] - self.Ts)/self.Dl[0])
     
-    self.ql[0] = self.km*((self.Tm[0] - self.Tl[0])/self.delta_s[0]) 
+    self.ql[0] = self.km_u*((self.Tm[0] - self.Tl[0])/self.delta_s[0]) 
 
     return
 
-#####################################################
+
+#####################################################################################
 def calculate_viscosity(s, T, P):
     """Calculate T- and P-dependent viscosity based on Arrhenius law for diffusion creep"""
-#####################################################
+#####################################################################################
+
+ #   if s.tectonics =='SL':
+ #   if s.rheology =='karato_wet': # Karato & Wu (1993)
+  #  B = 3.7e-19
+  #  m = 2.5
+  #  d = 2e-3
+  #  E = 2.4e5
+  #  V = 5e-6
+  #  eta = 1/(2*B) * d**m * np.exp( (E+P*V)/(s.Rg*T) )  
+  #  elif s.rheology =='karato_dry': #  Karato & Wu (1993)
+      #  B = 6.1e-19
+      #  m = 2.5
+      #  d = 2e-3
+      #  E = 3e5
+      #  V = 2.5e-6
+      #  eta = 1/(2*B) * d**m * np.exp( (E+P*V)/(s.Rg*T) ) 
+  #  else: # Stamenkovic 2012, chosen for Schmidt et al. (under Review
 
     if s.tectonics =='SL':
-        eta = s.etaref*np.exp( (s.E + P*s.V)/(s.Rg*T) - (s.E + s.Pref*s.V)/(s.Rg*s.Tref) )
+        eta = s.etaref*np.exp( (s.E + P*s.V)/(s.Rg*T) - (s.E + s.Pref*s.V)/(s.Rg*s.Tref) ) # Stamenkovic 2012
+                
     else: #ML; chosen Morschhauser viscosity because for mobile lid tectonics, the viscosity of the upper mantle becomes pressure-independent (Stamenkovic 2012), might needs to change for super-Earths planets
         eta = s.etaref*np.exp( s.E*(s.Tref-T)/(s.Rg*s.Tref*T)) # Morschhauser 2011 
-
+        
     return eta 
+
 
 #####################################################
 def calculate_viscosity_CMB(s, T, P): #, V
     """Calculate T- and P-dependent viscosity based on Arrhenius law for diffusion creep, for Pb (upper lower thermal boundary layer) 
-    >5e10 Pa"""
+    >25e10 Pa"""
 #####################################################
 
     V_down = (1.38+2.15*np.exp(-0.065*(P/1e9+10)**0.485))/1e6  #activation volume for lower mante in larger planets
@@ -363,19 +384,6 @@ def calculate_viscosity_CMB(s, T, P): #, V
 
     return eta
 
-#####################################################################################
-def calculate_viscosity_karato(s, T, P):
-    """Calculate T- and P-dependent viscosity according to Karato & Wu (1993)"""
-#####################################################################################
-
-    B = 6.1e-19
-    m = 2.5
-    d = 2e-3
-    E = 3e5
-    V = 2.5e-6
-    eta = 1/(2*B) * d**m * np.exp( (E+P*s.V)/(s.Rg*T) )  
-
-    return eta 
 
 ###################################################################################################
 def calculate_thermal_expansivity(T, P):
@@ -570,14 +578,14 @@ def write_output_file(s, outfile):
         outdata = {'time[Myrs]':s.t/yrs/1e6, 'Qm[W/kg]':s.Qm, 'Qcr[W/kg]':s.Qcr, 'Tcr[K]':s.Tcr, 'Tm[K]':s.Tm, 'Tc[K]':s.Tc, 'etam[Pas]':s.etam, 'etab[Pas]':s.etab, 'etac[Pas]':s.etac, 'qs[W/m3]':s.qs, 'ql[W/m3]':s.ql, 'qc[W/m3]':s.qc, 'delta_s[m]':s.delta_s, 'delta_c[m]':s.delta_c, 'Dcr[m]':s.Dcr, 'Dl[m]':s.Dl, 'Dm[m]':s.Dm, 'Pcr[Pa]':s.Pcr, 'Pl[Pa]':s.Pl, 'F_av':s.F_av, 'depletion':s.depl,'Dcr_prod[km3/yr]':s.Dcr_prod*s.yrs/1e9, 'Xm_HPE[wt%]':s.Xm_HPE, 'Xm_K[wt%]':s.Xm_K, 'Xm_H2O[wt%]':s.Xm_H2O, 'Mcr[kg]':s.Mcr,  'Mm_evol':s.Mm_evol, 'M_degas_H2O[kg]':s.M_degas_H2O_dt, 'M_H2O_gas[kg]':s.M_H2O_gas, 'EGL[m]':s.EGL, 'Mcr_U238[kg]':s.Mcr_U238,  'Mcr_U235[kg]':s.Mcr_U235, 'Mcr_Th232[kg]':s.Mcr_Th232, 'Mcr_K40[kg]':s.Mcr_K40, 'Mcr_HPE[kg]':s.Mcr_HPE, 'Mcr_K[kg]':s.Mcr_K, 'Mcr_La[kg]':s.Mcr_La, 'Mcr_Ce[kg]':s.Mcr_Ce, 'Mcr_Sm[kg]':s.Mcr_Sm, 'Mcr_Eu[kg]':s.Mcr_Eu, 'Mcr_Lu[kg]':s.Mcr_Lu, 'Pmelt_min':s.Pmelt_min, 'Pmelt_mean':s.Pmelt_mean, 'Pmelt_max':s.Pmelt_max, 'Tmelt_min':s.Tmelt_min, 'Tmelt_mean':s.Tmelt_mean, 'Tmelt_max':s.Tmelt_max, 'Xmantle_HPE':s.Xmantle_HPE, 'Xcrust_HPE':s.Xcrust_HPE, 'Xmantle_K':s.Xmantle_K, 'Xcrust_K':s.Xcrust_K, 'Xcrust_H2O':s.Xcrust_H2O, 'Xmantle_H2O':s.Xmantle_H2O,  'X_gas_H2O':s.X_gas_H2O}
 
         
-        columns = ('time[Myrs]', 'Qm[W/kg]', 'Qcr[W/kg]', 'Tcr[K]', 'Tm[K]', 'Tc[K]', 'etam[Pas]', 'etab[Pas]', 'etac[Pas]', 'qs[W/m3]', 'ql[W/m3]', 'qc[W/m3]', 'delta_s[m]', 'delta_c[m]', 'Dcr[m]', 'Dl[m]', 'Dm[m]', 'Pcr[Pa]', 'Pl[Pa]', 'F_av', 'depletion', 'Dcr_prod[km3/yr]', 'Xm_HPE[wt%]', 'Xm_K[wt%]', 'Xm_H2O[wt%]', 'Mcr[kg]', 'Mm_evol[kg]',  'M_degas_H2O[kg]', 'M_H2O_gas[kg]', 'EGL[m]', 'Mcr_U238[kg]', 'Mcr_U235[kg]', 'Mcr_Th232[kg]', 'Mcr_K40[kg]', 'Mcr_HPE[kg]', 'Mcr_K[kg]', 'Mcr_La[kg]', 'Mcr_Ce[kg]', 'Mcr_Sm[kg]', 'Mcr_Eu[kg]', 'Mcr_Lu[kg]', 'Pmelt_min[Pa]', 'Pmelt_mean[Pa]', 'Pmelt_max[Pa]', 'Tmelt_min[K]', 'Tmelt_mean[K]', 'Tmelt_max[K]','Xmantle_HPE[%]', 'Xcrust_HPE[%]', 'Xmantle_K[%]', 'Xcrust_K[%]', 'Xcrust_H2O[%]', 'Xmantle_H2O[%]', 'X_gas_H2O[%]')
+        columns = ('time[Myrs]', 'Qm[W/kg]', 'Qcr[W/kg]', 'Tcr[K]', 'Tm[K]', 'Tc[K]', 'etam[Pas]', 'etab[Pas]', 'etac[Pas]', 'qs[W/m3]', 'ql[W/m3]', 'qc[W/m3]', 'delta_s[m]', 'delta_c[m]', 'Dcr[m]', 'Dl[m]', 'Dm[m]', 'Pcr[Pa]', 'Pl[Pa]', 'F_av', 'depletion', 'Dcr_prod[km3/yr]', 'Xm_HPE[wt%]', 'Xm_K[wt%]', 'Xm_H2O[wt%]', 'Mcr[kg]', 'Mm_evol[kg]',  'M_degas_H2O[kg]', 'M_H2O_gas[kg]', 'EGL[m]', 'Mcr_U238[kg]', 'Mcr_U235[kg]', 'Mcr_Th232[kg]', 'Mcr_K40[kg]', 'Mcr_HPE[kg]', 'Mcr_K[kg]', 'Mcr_La[kg]', 'Mcr_Ce[kg]', 'Mcr_Sm[kg]', 'Mcr_Eu[kg]', 'Mcr_Lu[kg]', 'Pmelt_min[Pa]', 'Pmelt_max[Pa]', 'Tmelt_min[K]', 'Tmelt_max[K]','Xmantle_HPE[%]', 'Xcrust_HPE[%]', 'Xmantle_K[%]', 'Xcrust_K[%]', 'Xcrust_H2O[%]', 'Xmantle_H2O[%]', 'X_gas_H2O[%]')
         
      
     else:  # outdata with partition coefficient calculaitons
-        outdata = {'time[Myrs]':s.t/yrs/1e6, 'Qm[W/kg]':s.Qm, 'Qcr[W/kg]':s.Qcr, 'Tcr[K]':s.Tcr, 'Tm[K]':s.Tm, 'Tc[K]':s.Tc, 'etam[Pas]':s.etam, 'etab[Pas]':s.etab, 'etac[Pas]':s.etac, 'qs[W/m3]':s.qs, 'ql[W/m3]':s.ql, 'qc[W/m3]':s.qc, 'delta_s[m]':s.delta_s, 'delta_c[m]':s.delta_c, 'Dcr[m]':s.Dcr, 'Dl[m]':s.Dl, 'Dm[m]':s.Dm, 'Pcr[Pa]':s.Pcr, 'Pl[Pa]':s.Pl, 'F_av':s.F_av, 'depletion':s.depl,'Dcr_prod[km3/yr]':s.Dcr_prod*s.yrs/1e9, 'Xm_HPE[wt%]':s.Xm_HPE, 'Xm_K[wt%]':s.Xm_K, 'Xm_H2O[wt%]':s.Xm_H2O, 'Mcr[kg]':s.Mcr, 'M_degas_H2O[kg]':s.M_degas_H2O_dt, 'M_H2O_gas[kg]':s.M_H2O_gas, 'EGL[m]':s.EGL, 'Mcr_U238[kg]':s.Mcr_U238,  'Mcr_U235[kg]':s.Mcr_U235, 'Mcr_Th232[kg]':s.Mcr_Th232, 'Mcr_K40[kg]':s.Mcr_K40, 'Mcr_HPE[kg]':s.Mcr_HPE, 'Mcr_K[kg]':s.Mcr_K, 'Mcr_La[kg]':s.Mcr_La, 'Mcr_Ce[kg]':s.Mcr_Ce, 'Mcr_Sm[kg]':s.Mcr_Sm, 'Mcr_Eu[kg]':s.Mcr_Eu, 'Mm_evol':s.Mm_evol, 'Mcr_Lu[kg]':s.Mcr_Lu, 'Pmelt_min':s.Pmelt_min, 'Pmelt_mean':s.Pmelt_mean, 'Pmelt_max':s.Pmelt_max, 'Tmelt_min':s.Tmelt_min, 'Tmelt_mean':s.Tmelt_mean, 'Tmelt_max':s.Tmelt_max, 'Xmantle_HPE':s.Xmantle_HPE, 'Xcrust_HPE':s.Xcrust_HPE, 'Xmantle_K':s.Xmantle_K, 'Xcrust_K':s.Xcrust_K, 'Xcrust_H2O':s.Xcrust_H2O, 'Xmantle_H2O':s.Xmantle_H2O,  'X_gas_H2O':s.X_gas_H2O, 'D_K_min':s.D_K_min, 'D_K_max':s.D_K_max, 'D_Th_min':s.D_Th_min, 'D_Th_max':s.D_Th_max, 'D_U_min':s.D_U_min, 'D_U_max':s.D_U_max, 'D_Ce_min':s.D_Ce_min, 'D_Ce_max':s.D_Ce_max, 'D_La_min':s.D_La_min, 'D_La_max':s.D_La_max, 'D_Sm_min':s.D_Sm_min, 'D_Sm_max':s.D_Sm_max, 'D_Eu_min':s.D_Eu_min, 'D_Eu_max':s.D_Eu_max, 'D_Lu_min':s.D_Lu_min, 'D_Lu_max':s.D_Lu_max, 'D_K_Cpx_min':s.D_K_Cpx_min, 'D_K_Cpx_max':s.D_K_Cpx_max, 'D_Th_Cpx_min':s.D_Th_Cpx_min, 'D_Th_Cpx_max':s.D_Th_Cpx_max, 'D_U_Cpx_min':s.D_U_Cpx_min, 'D_U_Cpx_max':s.D_U_Cpx_max, 'D_Ce_Cpx_min':s.D_Ce_Cpx_min, 'D_Ce_Cpx_max':s.D_Ce_Cpx_max, 'D_La_Cpx_min':s.D_La_Cpx_min, 'D_La_Cpx_max':s.D_La_Cpx_max, 'D_Sm_Cpx_min':s.D_Sm_Cpx_min, 'D_Sm_Cpx_max':s.D_Sm_Cpx_max, 'D_Eu_Cpx_min':s.D_Eu_Cpx_min, 'D_Eu_Cpx_max':s.D_Eu_Cpx_max, 'D_Lu_Cpx_min':s.D_Lu_Cpx_min, 'D_Lu_Cpx_max':s.D_Lu_Cpx_max}
+        outdata = {'time[Myrs]':s.t/yrs/1e6, 'Qm[W/kg]':s.Qm, 'Qcr[W/kg]':s.Qcr, 'Tcr[K]':s.Tcr, 'Tm[K]':s.Tm, 'Tc[K]':s.Tc, 'etam[Pas]':s.etam, 'etab[Pas]':s.etab, 'etac[Pas]':s.etac, 'qs[W/m3]':s.qs, 'ql[W/m3]':s.ql, 'qc[W/m3]':s.qc, 'delta_s[m]':s.delta_s, 'delta_c[m]':s.delta_c, 'Dcr[m]':s.Dcr, 'Dl[m]':s.Dl, 'Dm[m]':s.Dm, 'Pcr[Pa]':s.Pcr, 'Pl[Pa]':s.Pl, 'F_av':s.F_av, 'depletion':s.depl,'Dcr_prod[km3/yr]':s.Dcr_prod*s.yrs/1e9, 'Xm_HPE[wt%]':s.Xm_HPE, 'Xm_K[wt%]':s.Xm_K, 'Xm_H2O[wt%]':s.Xm_H2O, 'Mcr[kg]':s.Mcr, 'M_degas_H2O[kg]':s.M_degas_H2O_dt, 'M_H2O_gas[kg]':s.M_H2O_gas, 'EGL[m]':s.EGL, 'Mcr_U238[kg]':s.Mcr_U238,  'Mcr_U235[kg]':s.Mcr_U235, 'Mcr_Th232[kg]':s.Mcr_Th232, 'Mcr_K40[kg]':s.Mcr_K40, 'Mcr_HPE[kg]':s.Mcr_HPE, 'Mcr_K[kg]':s.Mcr_K, 'Mcr_La[kg]':s.Mcr_La, 'Mcr_Ce[kg]':s.Mcr_Ce, 'Mcr_Sm[kg]':s.Mcr_Sm, 'Mcr_Eu[kg]':s.Mcr_Eu, 'Mm_evol':s.Mm_evol, 'Mcr_Lu[kg]':s.Mcr_Lu, 'Pmelt_min':s.Pmelt_min, 'Pmelt_max':s.Pmelt_max, 'Tmelt_min':s.Tmelt_min, 'Tmelt_max':s.Tmelt_max, 'Xmantle_HPE':s.Xmantle_HPE, 'Xcrust_HPE':s.Xcrust_HPE, 'Xmantle_K':s.Xmantle_K, 'Xcrust_K':s.Xcrust_K, 'Xcrust_H2O':s.Xcrust_H2O, 'Xmantle_H2O':s.Xmantle_H2O,  'X_gas_H2O':s.X_gas_H2O, 'D_K_min':s.D_K_min, 'D_K_max':s.D_K_max, 'D_Th_min':s.D_Th_min, 'D_Th_max':s.D_Th_max, 'D_U_min':s.D_U_min, 'D_U_max':s.D_U_max, 'D_Ce_min':s.D_Ce_min, 'D_Ce_max':s.D_Ce_max, 'D_La_min':s.D_La_min, 'D_La_max':s.D_La_max, 'D_Sm_min':s.D_Sm_min, 'D_Sm_max':s.D_Sm_max, 'D_Eu_min':s.D_Eu_min, 'D_Eu_max':s.D_Eu_max, 'D_Lu_min':s.D_Lu_min, 'D_Lu_max':s.D_Lu_max, 'D_K_Cpx_min':s.D_K_Cpx_min, 'D_K_Cpx_max':s.D_K_Cpx_max, 'D_Th_Cpx_min':s.D_Th_Cpx_min, 'D_Th_Cpx_max':s.D_Th_Cpx_max, 'D_U_Cpx_min':s.D_U_Cpx_min, 'D_U_Cpx_max':s.D_U_Cpx_max, 'D_Ce_Cpx_min':s.D_Ce_Cpx_min, 'D_Ce_Cpx_max':s.D_Ce_Cpx_max, 'D_La_Cpx_min':s.D_La_Cpx_min, 'D_La_Cpx_max':s.D_La_Cpx_max, 'D_Sm_Cpx_min':s.D_Sm_Cpx_min, 'D_Sm_Cpx_max':s.D_Sm_Cpx_max, 'D_Eu_Cpx_min':s.D_Eu_Cpx_min, 'D_Eu_Cpx_max':s.D_Eu_Cpx_max, 'D_Lu_Cpx_min':s.D_Lu_Cpx_min, 'D_Lu_Cpx_max':s.D_Lu_Cpx_max}
 
         
-        columns = ('time[Myrs]', 'Qm[W/kg]', 'Qcr[W/kg]', 'Tcr[K]', 'Tm[K]', 'Tc[K]', 'etam[Pas]', 'etab[Pas]', 'etac[Pas]', 'qs[W/m3]', 'ql[W/m3]', 'qc[W/m3]', 'delta_s[m]', 'delta_c[m]', 'Dcr[m]', 'Dl[m]', 'Dm[m]', 'Pcr[Pa]', 'Pl[Pa]', 'F_av', 'depletion', 'Dcr_prod[km3/yr]', 'Xm_HPE[wt%]', 'Xm_K[wt%]', 'Xm_H2O[wt%]', 'Mcr[kg]', 'Mm_evol[kg]', 'M_degas_H2O[kg]', 'M_H2O_gas[kg]', 'EGL[m]', 'Mcr_U238[kg]',  'Mcr_U235[kg]', 'Mcr_Th232[kg]', 'Mcr_K40[kg]', 'Mcr_HPE[kg]', 'Mcr_K[kg]', 'Mcr_La[kg]', 'Mcr_Ce[kg]', 'Mcr_Sm[kg]', 'Mcr_Eu[kg]', 'Mcr_Lu[kg]', 'Pmelt_min[Pa]', 'Pmelt_mean[Pa]', 'Pmelt_max[Pa]', 'Tmelt_min[K]', 'Tmelt_mean[K]', 'Tmelt_max[K]','Xmantle_HPE[%]', 'Xcrust_HPE[%]',  'Xmantle_K[%]', 'Xcrust_K[%]', 'Xcrust_H2O[%]', 'Xmantle_H2O[%]', 'X_gas_H2O[%]', 'D_K_min', 'D_K_max', 'D_Th_min', 'D_Th_max', 'D_U_min', 'D_U_max', 'D_Ce_min', 'D_Ce_max', 'D_La_min', 'D_La_max', 'D_Sm_min', 'D_Sm_max', 'D_Eu_min', 'D_Eu_max', 'D_Lu_min', 'D_Lu_max','D_K_Cpx_min', 'D_K_Cpx_max', 'D_Th_Cpx_min', 'D_Th_Cpx_max', 'D_U_Cpx_min', 'D_U_Cpx_max', 'D_Ce_Cpx_min', 'D_Ce_Cpx_max', 'D_La_Cpx_min', 'D_La_Cpx_max', 'D_Sm_Cpx_min',  'D_Sm_Cpx_max', 'D_Eu_Cpx_min', 'D_Eu_Cpx_max', 'D_Lu_Cpx_min', 'D_Lu_Cpx_max')
+        columns = ('time[Myrs]', 'Qm[W/kg]', 'Qcr[W/kg]', 'Tcr[K]', 'Tm[K]', 'Tc[K]', 'etam[Pas]', 'etab[Pas]', 'etac[Pas]', 'qs[W/m3]', 'ql[W/m3]', 'qc[W/m3]', 'delta_s[m]', 'delta_c[m]', 'Dcr[m]', 'Dl[m]', 'Dm[m]', 'Pcr[Pa]', 'Pl[Pa]', 'F_av', 'depletion', 'Dcr_prod[km3/yr]', 'Xm_HPE[wt%]', 'Xm_K[wt%]', 'Xm_H2O[wt%]', 'Mcr[kg]', 'Mm_evol[kg]', 'M_degas_H2O[kg]', 'M_H2O_gas[kg]', 'EGL[m]', 'Mcr_U238[kg]',  'Mcr_U235[kg]', 'Mcr_Th232[kg]', 'Mcr_K40[kg]', 'Mcr_HPE[kg]', 'Mcr_K[kg]', 'Mcr_La[kg]', 'Mcr_Ce[kg]', 'Mcr_Sm[kg]', 'Mcr_Eu[kg]', 'Mcr_Lu[kg]', 'Pmelt_min[Pa]', 'Pmelt_max[Pa]', 'Tmelt_min[K]', 'Tmelt_max[K]','Xmantle_HPE[%]', 'Xcrust_HPE[%]',  'Xmantle_K[%]', 'Xcrust_K[%]', 'Xcrust_H2O[%]', 'Xmantle_H2O[%]', 'X_gas_H2O[%]', 'D_K_min', 'D_K_max', 'D_Th_min', 'D_Th_max', 'D_U_min', 'D_U_max', 'D_Ce_min', 'D_Ce_max', 'D_La_min', 'D_La_max', 'D_Sm_min', 'D_Sm_max', 'D_Eu_min', 'D_Eu_max', 'D_Lu_min', 'D_Lu_max','D_K_Cpx_min', 'D_K_Cpx_max', 'D_Th_Cpx_min', 'D_Th_Cpx_max', 'D_U_Cpx_min', 'D_U_Cpx_max', 'D_Ce_Cpx_min', 'D_Ce_Cpx_max', 'D_La_Cpx_min', 'D_La_Cpx_max', 'D_Sm_Cpx_min',  'D_Sm_Cpx_max', 'D_Eu_Cpx_min', 'D_Eu_Cpx_max', 'D_Lu_Cpx_min', 'D_Lu_Cpx_max')
      
     
     df = pd.DataFrame(data=outdata)

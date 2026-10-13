@@ -349,7 +349,7 @@ class interior_evolution:
             idx_meltzone = np.argwhere((Pprof<15e9) & (Tprof > Tsolr)) 
             
             if idx_meltzone.size > 0:
-                valid_melt_idx = [idx for idx in idx_meltzone if Pprof[idx] < self.Pcrossover and idx < npt - 1]
+                valid_melt_idx = [idx for idx in idx_meltzone[:, 0] if Pprof[idx] < self.Pcrossover and idx < npt - 1]
                 if valid_melt_idx:
                     self.Tmelt_min[i] = Tprof[valid_melt_idx[-1]]   
                     self.Tmelt_max[i] = Tprof[valid_melt_idx[0]]    
@@ -374,7 +374,7 @@ class interior_evolution:
             self.X_La_liq[i] = 0
             self.X_Eu_liq[i] = 0
             
-            for idx in idx_meltzone: 
+            for idx in idx_meltzone[:, 0]: 
                 if (Pprof[idx] < self.Pcrossover) and (idx < npt -1):  
                     it=it+1 
                     F =  (Tprof[idx] - Tsolr[idx])/(Tliqr[idx] - Tsolr_ini[idx])#**1.5 #determine melt fraction
@@ -397,7 +397,7 @@ class interior_evolution:
 
                     fwm = suppf.melt_composition_factor(self) 
 
-                    self.Kf = 10.0**(self.KI+self.KII+self.fO2)
+                    self.Kf = 10.0**(self.KI+self.KII + self.fO2)
                     self.X_carbonate_melt[i] = self.Kf/(1.0+self.Kf) 
                     self.X_CO2_melt[i] =((44.01/fwm)*self.X_carbonate_melt[i])/(1.0-(1.0-(44.01/fwm))* self.X_carbonate_melt[i]) # with 44.01 representing the MM of CO2 (12+2*16)
                     self.X_CO2_melt[i] = min(self.X_CO2_melt[i],self.Xm_CO2[i-1]/F) # concentration in melt 
